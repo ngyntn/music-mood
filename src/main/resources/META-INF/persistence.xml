@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+
+    <!--
+        Persistence Unit này sẽ được WildFly/Payara quản lý (JTA).
+        Datasource "MusicDS" phải được cấu hình sẵn trên server.
+
+        HƯỚNG DẪN TẠO DATASOURCE TRÊN WILDFLY:
+        1. Truy cập WildFly Admin Console: http://localhost:9990
+        2. Vào Configuration > Subsystems > Datasources
+        3. Thêm MySQL Datasource với tên JNDI: java:/MusicDS
+           - Driver: mysql-connector-java (cần deploy driver vào server)
+           - Connection URL: jdbc:mysql://localhost:3306/music_db?useSSL=false&serverTimezone=UTC
+           - Username: root (hoặc user của bạn)
+           - Password: (mật khẩu của bạn)
+    -->
+
+    <persistence-unit name="MusicPU" transaction-type="JTA">
+
+        <!-- JNDI name của Datasource đã cấu hình trên WildFly/Payara -->
+        <jta-data-source>java:/MusicDS</jta-data-source>
+
+        <!-- Khai báo tất cả các JPA Entity classes -->
+        <class>com.musicmood.entity.User</class>
+        <class>com.musicmood.entity.Song</class>
+        <class>com.musicmood.entity.Playlist</class>
+
+        <properties>
+            <!-- Hibernate Dialect cho MySQL 8 -->
+            <property name="hibernate.dialect"
+                      value="org.hibernate.dialect.MySQL8Dialect"/>
+
+            <!--
+                hibernate.hbm2ddl.auto:
+                - "update"  : Tự động tạo/cập nhật bảng (dùng khi dev)
+                - "create"  : Xóa và tạo lại bảng mỗi lần deploy (mất data!)
+                - "validate": Chỉ kiểm tra schema (dùng khi production)
+                - "none"    : Không làm gì (dùng khi production)
+            -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+            <!-- Hiển thị SQL ra console (hữu ích khi debug) -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+
+            <!-- Character set cho MySQL -->
+            <property name="hibernate.connection.characterEncoding" value="UTF-8"/>
+            <property name="hibernate.connection.useUnicode" value="true"/>
+        </properties>
+
+    </persistence-unit>
+
+</persistence>
