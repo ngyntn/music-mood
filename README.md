@@ -1,4 +1,4 @@
-Chào bạn! Đây là bản nội dung cho file **README.md** của dự án, được trình bày một cách chuyên nghiệp, cấu trúc rõ ràng để bạn có thể đưa thẳng vào repository của mình.
+
 
 ---
 
